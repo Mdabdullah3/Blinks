@@ -18,11 +18,14 @@ export async function GET(req: Request, { params }: Context) {
     const data = await res.json();
     const token = data.pairs?.[0];
 
-    const symbol = token?.baseToken?.symbol || "TOKEN";
+    const symbol =
+      token?.baseToken?.symbol || mint.substring(0, 4).toUpperCase();
     const price = token?.priceUsd ? `$${token.priceUsd}` : "Live";
+
+    // FIXED: Using a guaranteed working Solana logo as fallback
     const icon =
       token?.info?.imageUrl ||
-      "https://ucarecdn.com/707aa3c6-67a4-4363-8c46-993425039f9b/";
+      "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/solana/info/logo.png";
 
     const payload: ActionGetResponse = {
       type: "action",
@@ -30,8 +33,8 @@ export async function GET(req: Request, { params }: Context) {
       title: `Buy $${symbol} - Pro Terminal`,
       description: `📊 **Price:** ${price} | **24h Vol:** $${
         token?.volume?.h24?.toLocaleString() || "0"
-      }\n\nEnter the amount of SOL you want to spend below.`,
-      label: "Buy",
+      }\n\nEnter SOL amount to calculate details.`,
+      label: "Calculate",
       links: {
         actions: [
           {
@@ -40,11 +43,10 @@ export async function GET(req: Request, { params }: Context) {
             parameters: [
               {
                 name: "amount",
-                label: "Amount in SOL (e.g. 0.1)",
+                label: "SOL Amount (e.g. 0.1)",
                 required: true,
               },
             ],
-            type: "transaction",
           },
         ],
       },
