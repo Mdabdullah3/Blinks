@@ -14,16 +14,15 @@ export async function POST(req: Request, { params }: Context) {
   try {
     const body: ActionPostRequest = await req.json();
     const userWallet = body.account;
-
     const amountInLamports = Math.floor(Number(amount) * 1_000_000_000);
 
-    // 1. Get Fresh Quote
+    // 1. Fresh Quote
     const quoteRes = await fetch(
       `https://quote-api.jup.ag/v6/quote?inputMint=So11111111111111111111111111111111111111112&outputMint=${mint}&amount=${amountInLamports}&slippageBps=100`
     );
     const quote = await quoteRes.json();
 
-    // 2. Get Serialized Transaction from Jupiter
+    // 2. Build Swap with Fee Logic
     const swapRes = await fetch("https://quote-api.jup.ag/v6/swap", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -31,6 +30,8 @@ export async function POST(req: Request, { params }: Context) {
         quoteResponse: quote,
         userPublicKey: userWallet,
         wrapAndUnwrapSol: true,
+        // UNCOMMENT THIS TO START EARNING:
+        // platformFeeBps: 50, // 0.5% fee
       }),
     });
     const { swapTransaction } = await swapRes.json();
@@ -38,13 +39,13 @@ export async function POST(req: Request, { params }: Context) {
     const payload: ActionPostResponse = {
       type: "transaction",
       transaction: swapTransaction,
-      message: `Swapping ${amount} SOL for tokens...`,
+      message: `Transaction created! Sign in your wallet to confirm the swap.`,
     };
 
     return Response.json(payload, { headers: ACTIONS_CORS_HEADERS });
   } catch (err) {
     return Response.json(
-      { message: "Transaction failed" },
+      { message: "Swap failed" },
       { status: 500, headers: ACTIONS_CORS_HEADERS }
     );
   }
