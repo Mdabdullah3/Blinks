@@ -11,8 +11,11 @@ type Context = {
 };
 
 export async function GET(req: Request, { params }: Context) {
-  // We MUST await params in Next.js 15
   const { mint } = await params;
+
+  // 1. GET THE DYNAMIC BASE URL (This makes the links absolute)
+  const url = new URL(req.url);
+  const baseHref = `${url.protocol}//${url.host}/api/actions/buy/${mint}`;
 
   try {
     const res = await fetch(
@@ -23,8 +26,10 @@ export async function GET(req: Request, { params }: Context) {
     const token = data.pairs?.[0];
 
     // Professional Fallback UI
-    const symbol = token?.baseToken?.symbol || "Token";
-    const price = token?.priceUsd || "Live";
+    // If DexScreener is null, we show the first 4 letters of the Mint as the name
+    const symbol =
+      token?.baseToken?.symbol || mint.substring(0, 4).toUpperCase();
+    const price = token?.priceUsd ? `$${token.priceUsd}` : "Live Price";
     const icon =
       token?.info?.imageUrl ||
       "https://ucarecdn.com/707aa3c6-67a4-4363-8c46-993425039f9b/";
@@ -32,26 +37,27 @@ export async function GET(req: Request, { params }: Context) {
     const payload: ActionGetResponse = {
       icon: icon,
       title: `Buy $${symbol} on X`,
-      description: `Mint: ${mint.substring(0, 4)}...${mint.substring(
-        mint.length - 4
-      )} | Price: $${price}`,
+      description: `Holders only! | Mint: ${mint.substring(
+        0,
+        4
+      )}...${mint.substring(mint.length - 4)} | Price: ${price}`,
       label: "Buy",
       links: {
         actions: [
           {
-              label: "0.1 SOL",
-              href: `/api/actions/buy/${mint}?amount=0.1`,
-              type: "transaction"
+            label: "0.1 SOL",
+            href: `${baseHref}?amount=0.1`,
+            type: "transaction",
           },
           {
-              label: "0.5 SOL",
-              href: `/api/actions/buy/${mint}?amount=0.5`,
-              type: "transaction"
+            label: "0.5 SOL",
+            href: `${baseHref}?amount=0.5`,
+            type: "transaction",
           },
           {
-              label: "1.0 SOL",
-              href: `/api/actions/buy/${mint}?amount=1.0`,
-              type: "transaction"
+            label: "1.0 SOL",
+            href: `${baseHref}?amount=1.0`,
+            type: "transaction",
           },
         ],
       },
