@@ -1,70 +1,52 @@
-// app/api/actions/buy/[mint]/route.ts
-import { ActionGetResponse, ACTIONS_CORS_HEADERS } from "@solana/actions";
-import { NextRequest } from "next/server";
+import {
+  ActionGetResponse,
+  ActionPostRequest,
+  ActionPostResponse,
+  ACTIONS_CORS_HEADERS,
+} from "@solana/actions";
+import { PublicKey } from "@solana/web3.js";
 
 export async function GET(
-  req: NextRequest,
-  { params }: { params: Promise<{ mint: string }> }
+  req: Request,
+  { params }: { params: { mint: string } }
 ) {
-  const { mint } = await params;
+  const mint = params.mint;
 
   try {
-    // 1. Fetch Real-time data from DexScreener (Free & No Key)
     const res = await fetch(
-      `https://api.dexscreener.com/latest/dex/tokens/${mint}`,
-      {
-        headers: {
-          "User-Agent":
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
-        },
-      }
+      `https://api.dexscreener.com/latest/dex/tokens/${mint}`
     );
-
     const data = await res.json();
 
-    // DEBUG: Look at your terminal/command prompt to see what this prints!
-    console.log(
-      "DexScreener Response:",
-      JSON.stringify(data).substring(0, 200)
-    );
+    const token = data.pairs?.[0];
 
-    if (!data.pairs || data.pairs.length === 0) {
-      return Response.json(
-        {
-          message:
-            "Token not found on DexScreener. Make sure it has a Liquidity Pool.",
-        },
-        { status: 404, headers: ACTIONS_CORS_HEADERS }
-      );
-    }
+    // Professional Fallback UI
+    const symbol = token?.baseToken?.symbol || "Token";
+    const price = token?.priceUsd || "Live";
+    const icon =
+      token?.info?.imageUrl ||
+      "https://ucarecdn.com/707aa3c6-67a4-4363-8c46-993425039f9b/";
 
-    const token = data.pairs[0];
-    const symbol = token.baseToken.symbol;
-    const price = token.priceUsd;
-    const icon = token.info?.imageUrl || "";
-
-    // 2. Build the Blink Box UI
     const payload: ActionGetResponse = {
       icon: icon,
       title: `Buy $${symbol} on X`,
-      description: `Live Price: $${price} | 24h Vol: $${token.volume.h24.toLocaleString()}`,
+      description: `Mint: ${mint.substring(0, 4)}...${mint.substring(
+        mint.length - 4
+      )} | Price: $${price}`,
       label: "Buy",
       links: {
         actions: [
           {
-            label: "0.1 SOL",
-            href: `/api/actions/buy/${mint}?amount=0.1`,
-            type: "transaction",
+              label: "0.1 SOL", href: `/api/actions/buy/${mint}?amount=0.1`,
+              type: "transaction"
           },
           {
-            label: "0.5 SOL",
-            href: `/api/actions/buy/${mint}?amount=0.5`,
-            type: "transaction",
+              label: "0.5 SOL", href: `/api/actions/buy/${mint}?amount=0.5`,
+              type: "transaction"
           },
           {
-            label: "1.0 SOL",
-            href: `/api/actions/buy/${mint}?amount=1.0`,
-            type: "transaction",
+              label: "1.0 SOL", href: `/api/actions/buy/${mint}?amount=1.0`,
+              type: "transaction"
           },
         ],
       },
@@ -72,15 +54,63 @@ export async function GET(
 
     return Response.json(payload, { headers: ACTIONS_CORS_HEADERS });
   } catch (err) {
-    console.error(err);
     return Response.json(
-      { message: "Internal Error" },
+      { message: "Network Error" },
       { status: 500, headers: ACTIONS_CORS_HEADERS }
     );
   }
 }
 
-// OPTIONS request handles pre-flight for CORS
+export async function POST(
+  req: Request,
+  { params }: { params: { mint: string } }
+) {
+  try {
+    const mint = params.mint;
+    const { searchParams } = new URL(req.url);
+    const amount = searchParams.get("amount") || "0.1";
+
+    const body: ActionPostRequest = await req.json();
+    const userWallet = body.account;
+
+    const amountInLamports = Math.floor(Number(amount) * 1_000_000_000);
+
+    // 1. Get Quote from Jupiter
+    const quoteRes = await fetch(
+      `https://quote-api.jup.ag/v6/quote?inputMint=So11111111111111111111111111111111111111112&outputMint=${mint}&amount=${amountInLamports}&slippageBps=100`
+    );
+    const quote = await quoteRes.json();
+
+    // 2. Create Swap Transaction
+    const swapRes = await fetch("https://quote-api.jup.ag/v6/swap", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        quoteResponse: quote,
+        userPublicKey: userWallet,
+        wrapAndUnwrapSol: true,
+        // THE MONEY MAKER: 100 bps = 1% fee for the project owner
+        // platformFeeBps: 100,
+        // feeAccount: "YOUR_FEE_ACCOUNT_HERE"
+      }),
+    });
+    const { swapTransaction } = await swapRes.json();
+
+    const payload: ActionPostResponse = {
+      type: "transaction",
+      transaction: swapTransaction,
+      message: `Swapping ${amount} SOL for token...`,
+    };
+
+    return Response.json(payload, { headers: ACTIONS_CORS_HEADERS });
+  } catch (err) {
+    return Response.json(
+      { message: "Transaction Error" },
+      { status: 500, headers: ACTIONS_CORS_HEADERS }
+    );
+  }
+}
+
 export async function OPTIONS() {
   return new Response(null, { headers: ACTIONS_CORS_HEADERS });
 }
