@@ -1,11 +1,12 @@
 // app/api/actions/buy/[mint]/route.ts
 import { ActionGetResponse, ACTIONS_CORS_HEADERS } from "@solana/actions";
+import { NextRequest } from "next/server";
 
 export async function GET(
-  req: Request,
-  { params }: { params: { mint: string } }
+  req: NextRequest,
+  { params }: { params: Promise<{ mint: string }> }
 ) {
-  const mint = params.mint;
+  const { mint } = await params;
 
   try {
     // 1. Fetch Real-time data from DexScreener (Free & No Key)
@@ -71,6 +72,7 @@ export async function GET(
 
     return Response.json(payload, { headers: ACTIONS_CORS_HEADERS });
   } catch (err) {
+    console.error(err);
     return Response.json(
       { message: "Internal Error" },
       { status: 500, headers: ACTIONS_CORS_HEADERS }
