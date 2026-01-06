@@ -4,13 +4,15 @@ import {
   ActionPostResponse,
   ACTIONS_CORS_HEADERS,
 } from "@solana/actions";
-import { PublicKey } from "@solana/web3.js";
 
-export async function GET(
-  req: Request,
-  { params }: { params: { mint: string } }
-) {
-  const mint = params.mint;
+// Update the type for params to be a Promise (Next.js 15 requirement)
+type Context = {
+  params: Promise<{ mint: string }>;
+};
+
+export async function GET(req: Request, { params }: Context) {
+  // We MUST await params in Next.js 15
+  const { mint } = await params;
 
   try {
     const res = await fetch(
@@ -37,15 +39,18 @@ export async function GET(
       links: {
         actions: [
           {
-              label: "0.1 SOL", href: `/api/actions/buy/${mint}?amount=0.1`,
+              label: "0.1 SOL",
+              href: `/api/actions/buy/${mint}?amount=0.1`,
               type: "transaction"
           },
           {
-              label: "0.5 SOL", href: `/api/actions/buy/${mint}?amount=0.5`,
+              label: "0.5 SOL",
+              href: `/api/actions/buy/${mint}?amount=0.5`,
               type: "transaction"
           },
           {
-              label: "1.0 SOL", href: `/api/actions/buy/${mint}?amount=1.0`,
+              label: "1.0 SOL",
+              href: `/api/actions/buy/${mint}?amount=1.0`,
               type: "transaction"
           },
         ],
@@ -61,12 +66,11 @@ export async function GET(
   }
 }
 
-export async function POST(
-  req: Request,
-  { params }: { params: { mint: string } }
-) {
+export async function POST(req: Request, { params }: Context) {
   try {
-    const mint = params.mint;
+    // We MUST await params in Next.js 15
+    const { mint } = await params;
+
     const { searchParams } = new URL(req.url);
     const amount = searchParams.get("amount") || "0.1";
 
@@ -89,9 +93,6 @@ export async function POST(
         quoteResponse: quote,
         userPublicKey: userWallet,
         wrapAndUnwrapSol: true,
-        // THE MONEY MAKER: 100 bps = 1% fee for the project owner
-        // platformFeeBps: 100,
-        // feeAccount: "YOUR_FEE_ACCOUNT_HERE"
       }),
     });
     const { swapTransaction } = await swapRes.json();
