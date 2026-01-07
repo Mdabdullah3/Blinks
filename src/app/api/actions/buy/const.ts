@@ -6,5 +6,5 @@ export const ACTIONS_CORS_HEADERS: Record<string, string> = {
   "Access-Control-Expose-Headers": "X-Action-Version, X-Blockchain-Ids",
   "Content-Type": "application/json",
   "X-Action-Version": "2.1.3",
-  "X-Blockchain-Ids": "solana:101", // Standard Mainnet ID
+  "X-Blockchain-Ids": "solana:101", // Use 101 for Mainnet
 };

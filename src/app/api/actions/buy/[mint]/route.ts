@@ -20,19 +20,19 @@ export async function GET(req: Request, { params }: Context) {
 
     const symbol =
       token?.baseToken?.symbol || mint.substring(0, 4).toUpperCase();
-
+    const price = token?.priceUsd ? `$${token.priceUsd}` : "Live";
     const icon =
-      token?.info?.imageUrl || "https://i.ibb.co.com/392F91Jk/solana.png";
+      token?.info?.imageUrl ||
+      "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/solana/info/logo.png";
 
     const payload: ActionGetResponse = {
       type: "action",
       icon: icon,
       title: `Buy ${symbol}`,
-      description: `Buy ${symbol} with SOL. Choose an amount from the options below, or enter a custom amount.`,
+      description: `Direct buy via Jupiter. Price: ${price}`,
       label: "Buy",
       links: {
         actions: [
-          // Row of buttons (0.1, 0.5, 1)
           {
             label: "0.1 SOL",
             href: `${baseHref}?amount=0.1`,
@@ -48,16 +48,11 @@ export async function GET(req: Request, { params }: Context) {
             href: `${baseHref}?amount=1.0`,
             type: "post",
           },
-          // Custom input with the button "Buy $SYMBOL"
           {
-            label: `Buy ${symbol}`, // This appears on the button next to the input
+            label: `Buy ${symbol}`,
             href: `${baseHref}?amount={amount}`,
             parameters: [
-              {
-                name: "amount",
-                label: "Enter a custom SOL amount",
-                required: true,
-              },
+              { name: "amount", label: "Enter SOL amount", required: true },
             ],
             type: "post",
           },
@@ -65,11 +60,12 @@ export async function GET(req: Request, { params }: Context) {
       },
     };
 
+    // CRITICAL: We MUST pass the headers here
     return Response.json(payload, { headers: ACTIONS_CORS_HEADERS });
   } catch (err) {
     return Response.json(
-      { message: "Network Error" },
-      { status: 500, headers: ACTIONS_CORS_HEADERS }
+      { message: "Error" },
+      { headers: ACTIONS_CORS_HEADERS }
     );
   }
 }
@@ -117,7 +113,10 @@ export async function POST(req: Request, { params }: Context) {
       },
     };
 
-    return Response.json(payload, { headers: ACTIONS_CORS_HEADERS });
+    return Response.json(
+      { transaction: "...", message: "..." },
+      { headers: ACTIONS_CORS_HEADERS }
+    );
   } catch (err) {
     return Response.json(
       { message: "Quote Error" },
@@ -128,4 +127,3 @@ export async function POST(req: Request, { params }: Context) {
 export async function OPTIONS() {
   return new Response(null, { headers: ACTIONS_CORS_HEADERS });
 }
-
