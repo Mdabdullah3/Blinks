@@ -12,6 +12,30 @@ import {
 import Image from "next/image";
 
 export default function LandingPage() {
+
+  // Inside your LandingPage component
+  const [activeSection, setActiveSection] = React.useState("");
+
+  React.useEffect(() => {
+    const handleScroll = () => {
+      // Get all sections you want to track
+      const sections = ["service", "pricing", "contact"];
+      const scrollPosition = window.scrollY + 200; // Offset for better trigger timing
+
+      for (const section of sections) {
+        const element = document.getElementById(section);
+        if (element) {
+          const { offsetTop, offsetHeight } = element;
+          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+            setActiveSection(section);
+          }
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
   const container = {
     hidden: { opacity: 0 },
     show: {
@@ -36,22 +60,44 @@ export default function LandingPage() {
       </div>
 
       {/* --- LUXE NAV --- */}
+      {/* --- LUXE NAV --- */}
       <nav className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-4xl">
         <div className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-full px-8 py-4 flex justify-between items-center shadow-2xl">
-          <div className="flex items-center gap-2 group cursor-pointer">
+          <div className="flex items-center gap-2 group cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
             <div className="w-8 h-8 bg-gradient-to-tr from-rose-500 to-violet-600 rounded-lg flex items-center justify-center shadow-[0_0_15px_rgba(225,29,72,0.4)]">
               <Zap className="w-5 h-5 text-white fill-current" />
             </div>
             <span className="text-xl font-black tracking-tighter">mostlabz.</span>
           </div>
-          <div className="hidden md:flex items-center gap-8 text-xs font-bold uppercase tracking-[0.2em] text-gray-400">
-            <a href="#" className="hover:text-rose-400 transition-colors">vision</a>
-            <a href="#" className="hover:text-rose-400 transition-colors">engine</a>
-            <a href="#" className="hover:text-rose-400 transition-colors">capital</a>
+
+          <div className="hidden md:flex items-center gap-8 text-xs font-bold uppercase tracking-[0.2em] relative">
+            {[
+              { id: "service", label: "Service" },
+              { id: "pricing", label: "Pricing" },
+              { id: "contact", label: "Contact" },
+            ].map((navItem) => (
+              <a
+                key={navItem.id}
+                href={`#${navItem.id}`}
+                className={`relative z-10 transition-colors duration-300 ${activeSection === navItem.id ? "text-rose-400" : "text-gray-400 hover:text-white"
+                  }`}
+              >
+                {navItem.label}
+                {activeSection === navItem.id && (
+                  <motion.div
+                    layoutId="nav-active"
+                    className="absolute -bottom-1 left-0 right-0 h-[2px] bg-rose-500"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
+                )}
+              </a>
+            ))}
           </div>
-          <a href="https://t.me/@abdullah_gram"><div className="bg-rose-600 hover:bg-rose-500 text-white px-5 py-2 rounded-full text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-rose-600/20">
-            Lunch
-          </div>
+
+          <a href="https://t.me/@abdullah_gram">
+            <div className="bg-rose-600 hover:bg-rose-500 text-white px-5 py-2 rounded-full text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-rose-600/20">
+              Lunch
+            </div>
           </a>
         </div>
       </nav>
@@ -104,7 +150,7 @@ export default function LandingPage() {
       </section>
 
       {/* --- THE BENTO VIBE GRID --- */}
-      <section className="py-20 px-6 relative">
+      <section className="py-20 px-6 relative" id="service">
         <motion.div
           variants={container}
           initial="hidden"
@@ -320,7 +366,7 @@ export default function LandingPage() {
       </section>
 
       {/* --- PRICING: THE RICH TIER --- */}
-      <section className="md:py-20 py-12 px-6">
+      <section className="md:py-20 py-12 px-6" id="pricing">
         <div className="max-w-5xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
             <h2 className="text-6xl md:text-8xl font-black tracking-tighter leading-none">choose <br /> your <span className="italic text-rose-500">power.</span></h2>
@@ -366,7 +412,7 @@ export default function LandingPage() {
 
       {/* --- FOOTER --- */}
       {/* --- ELITE MINIMAL FOOTER --- */}
-      <footer className="py-20 px-6 border-t border-white/5 relative overflow-hidden">
+      <section className="py-20 px-6 border-t border-white/5 relative overflow-hidden" id="contact">
         {/* Subtle Background Glow */}
         <div className="absolute bottom-0 right-0 w-96 h-96 bg-rose-600/5 blur-[120px] rounded-full -z-10" />
 
@@ -440,7 +486,7 @@ export default function LandingPage() {
             </div>
           </div>
         </div>
-      </footer>
+      </section>
     </div>
   );
 }
