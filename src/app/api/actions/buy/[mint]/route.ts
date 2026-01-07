@@ -21,10 +21,8 @@ export async function GET(req: Request, { params }: Context) {
     const symbol =
       token?.baseToken?.symbol || mint.substring(0, 4).toUpperCase();
 
-    
     const icon =
-      token?.info?.imageUrl ||
-      "/public/solana.png";
+      token?.info?.imageUrl || "https://i.ibb.co.com/392F91Jk/solana.png";
 
     const payload: ActionGetResponse = {
       type: "action",
