@@ -3,222 +3,385 @@
 import React from "react";
 import { motion } from "framer-motion";
 import {
-  Zap, ShieldCheck, Twitter, BarChart3, ArrowUpRight,
-  Layers, Cpu, Globe, Rocket, CheckCircle2, ChevronRight
+  Zap, ShieldCheck, Twitter, ArrowRight,
+  Layers, Sparkles, Globe, Heart, CheckCircle2,
+  Coins, Box, Workflow, ExternalLink,
+  BarChart3,
+  ArrowUpRight
 } from "lucide-react";
+import Image from "next/image";
 
 export default function LandingPage() {
-  return (
-    <div className="min-h-screen bg-[#050505] text-white selection:bg-cyan-500/30 overflow-x-hidden font-sans">
+  const container = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: { staggerChildren: 0.2 }
+    }
+  };
 
-      {/* --- ELITE ANIMATED BACKGROUND --- */}
+  const item = {
+    hidden: { opacity: 0, y: 30 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
+  };
+
+  return (
+    <div className="min-h-screen bg-[#0a0206] text-white selection:bg-rose-500/30 overflow-x-hidden font-sans lowercase">
+
+      {/* --- ELITE MESH BACKGROUND --- */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
-        <div className="absolute top-[-20%] left-[-10%] w-[70%] h-[70%] bg-gradient-to-br from-indigo-600/20 via-transparent to-transparent blur-[140px] animate-pulse" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-gradient-to-tl from-cyan-500/10 via-transparent to-transparent blur-[140px]" />
-        <div className="absolute top-[20%] right-[10%] w-[30%] h-[30%] bg-purple-600/10 blur-[100px] animate-bounce duration-[10s]" />
+        <div className="absolute top-[-10%] right-[-10%] w-[60%] h-[60%] bg-rose-600/20 blur-[160px] rounded-full animate-pulse" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[50%] h-[50%] bg-fuchsia-700/20 blur-[160px] rounded-full" />
+        <div className="absolute top-[30%] left-[20%] w-[30%] h-[30%] bg-violet-600/10 blur-[120px] rounded-full animate-bounce duration-[15s]" />
       </div>
 
-      {/* --- NAVIGATION --- */}
-      <nav className="fixed top-0 w-full z-50 px-6 py-6 backdrop-blur-md border-b border-white/5">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
+      {/* --- LUXE NAV --- */}
+      <nav className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-4xl">
+        <div className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-full px-8 py-4 flex justify-between items-center shadow-2xl">
           <div className="flex items-center gap-2 group cursor-pointer">
-            <div className="w-10 h-10 bg-gradient-to-br from-cyan-400 to-purple-600 rounded-xl flex items-center justify-center shadow-lg shadow-cyan-500/20 group-hover:rotate-12 transition-transform">
-              <Zap className="w-6 h-6 text-black fill-current" />
+            <div className="w-8 h-8 bg-gradient-to-tr from-rose-500 to-violet-600 rounded-lg flex items-center justify-center shadow-[0_0_15px_rgba(225,29,72,0.4)]">
+              <Zap className="w-5 h-5 text-white fill-current" />
             </div>
-            <span className="text-2xl font-black tracking-tighter italic">MostLabz</span>
+            <span className="text-xl font-black tracking-tighter">mostlabz.</span>
           </div>
-          <div className="hidden md:flex items-center gap-10 text-sm font-medium text-gray-400">
-            <a href="#features" className="hover:text-cyan-400 transition-colors">Infrastructure</a>
-            <a href="#pricing" className="hover:text-cyan-400 transition-colors">Pricing</a>
-            <a href="#demo" className="hover:text-cyan-400 transition-colors">Live Demo</a>
+          <div className="hidden md:flex items-center gap-8 text-xs font-bold uppercase tracking-[0.2em] text-gray-400">
+            <a href="#" className="hover:text-rose-400 transition-colors">vision</a>
+            <a href="#" className="hover:text-rose-400 transition-colors">engine</a>
+            <a href="#" className="hover:text-rose-400 transition-colors">capital</a>
           </div>
-          <button className="px-6 py-2.5 bg-white text-black text-sm font-bold rounded-full hover:bg-cyan-400 transition-all active:scale-95">
-            Get Started
+          <button className="bg-rose-600 hover:bg-rose-500 text-white px-5 py-2 rounded-full text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-rose-600/20">
+            launch
           </button>
         </div>
       </nav>
 
       {/* --- HERO SECTION --- */}
-      <section className="relative pt-44 pb-20 px-6">
-        <div className="max-w-7xl mx-auto text-center">
+      <section className="relative pt-60 pb-32 px-6">
+        <div className="max-w-7xl mx-auto">
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-cyan-500/30 bg-cyan-500/5 backdrop-blur-md mb-8 shadow-[0_0_20px_rgba(6,182,212,0.1)]"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="flex items-center gap-3 mb-6"
           >
-            <ShieldCheck className="w-4 h-4 text-cyan-400" />
-            <span className="text-xs font-bold uppercase tracking-widest text-cyan-400">Vetted by Superteam — 3x Winner</span>
+            <div className="h-[1px] w-12 bg-rose-500" />
+            <span className="text-rose-500 text-xs font-black uppercase tracking-[0.4em]">vetted by superteam</span>
           </motion.div>
 
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-6xl md:text-[120px] font-black mb-8 tracking-tighter leading-[0.9] uppercase"
-          >
-            Power Your <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 animate-gradient-x">
-              Community
-            </span>
-          </motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.2 }}
-            className="text-gray-400 text-lg md:text-2xl max-w-3xl mx-auto mb-12 leading-relaxed"
-          >
-            Don&apos;t let your community leave X to buy. MostLabz injects professional
-            trading terminals directly into your tweets.
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-6"
-          >
-            <button className="group px-10 py-5 bg-gradient-to-r from-cyan-500 to-blue-600 text-black font-black rounded-2xl flex items-center gap-3 hover:shadow-[0_0_40px_rgba(6,182,212,0.4)] transition-all active:scale-95 uppercase italic tracking-tighter">
-              Start Building <ArrowUpRight className="w-6 h-6 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-            </button>
-            <button className="px-10 py-5 bg-white/5 border border-white/10 backdrop-blur-md font-bold rounded-2xl hover:bg-white/10 transition-all uppercase tracking-tighter italic">
-              View Showcase
-            </button>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* --- THE BENTO GRID SECTION --- */}
-      <section id="features" className="py-24 px-6 relative">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-            {/* LARGE BENTO CARD */}
-            <div className="md:col-span-2 p-10 rounded-[3rem] bg-gradient-to-br from-zinc-900 to-black border border-white/5 relative overflow-hidden group">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/10 blur-[80px] group-hover:bg-cyan-500/20 transition-all" />
-              <Layers className="w-12 h-12 text-cyan-400 mb-8" />
-              <h2 className="text-4xl font-black mb-4 italic uppercase">Universal Infrastructure</h2>
-              <p className="text-gray-400 text-lg max-w-md">Our Blink engine handles every Solana token dynamically. Just paste your mint address and launch.</p>
-              <div className="mt-12 flex gap-4">
-                <div className="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-xs font-bold uppercase">Jupiter V6</div>
-                <div className="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-xs font-bold uppercase">Edge Computing</div>
-              </div>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-end">
+            <div className="lg:col-span-8">
+              <motion.h1
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-7xl md:text-[140px] font-black leading-[0.85] tracking-tight"
+              >
+                social <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 via-fuchsia-500 to-indigo-500">
+                  commerce
+                </span> <br />
+                redefined.
+              </motion.h1>
             </div>
 
-            {/* SMALL BENTO CARD */}
-            <div className="p-10 rounded-[3rem] bg-gradient-to-br from-purple-900/20 to-zinc-900 border border-white/5 flex flex-col justify-between group">
-              <Cpu className="w-12 h-12 text-purple-400 mb-8 group-hover:rotate-180 transition-transform duration-700" />
-              <div>
-                <h3 className="text-2xl font-black mb-2 uppercase italic">Verified</h3>
-                <p className="text-gray-400 text-sm">Full registry support ensuring your links never get flagged as spam.</p>
-              </div>
-            </div>
-
-            {/* SECOND ROW */}
-            <div className="p-10 rounded-[3rem] bg-zinc-900/50 border border-white/5 flex flex-col justify-between">
-              <BarChart3 className="text-green-400 w-10 h-10 mb-8" />
-              <h3 className="text-2xl font-black uppercase italic">0.1s Latency</h3>
-              <p className="text-gray-400 text-sm">Built on Vercel Edge for global transaction speed.</p>
-            </div>
-
-            <div className="md:col-span-2 p-10 rounded-[3rem] bg-gradient-to-r from-blue-900/20 to-zinc-900 border border-white/5 flex flex-col md:flex-row items-center gap-10 group">
-              <div className="flex-1">
-                <Globe className="text-blue-400 w-12 h-12 mb-6" />
-                <h3 className="text-4xl font-black italic uppercase mb-4">Revenue Engine</h3>
-                <p className="text-gray-400">Integrated referral system. Earn SOL for every trade your community makes.</p>
-              </div>
-              <div className="w-full md:w-64 h-40 bg-white/5 rounded-2xl border border-white/10 flex items-center justify-center relative overflow-hidden italic font-black text-white/10 text-4xl uppercase">
-                Cashflow
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-      {/* --- PRICING: THE RICH SECTION --- */}
-      <section id="pricing" className="py-32 px-6 bg-[#080808]">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-24">
-            <h2 className="text-6xl md:text-8xl font-black uppercase italic mb-6 tracking-tighter">Choose Your <br /><span className="text-cyan-400 underline decoration-purple-500 underline-offset-8">Tier</span></h2>
-            <p className="text-gray-500 text-xl font-medium">Scalable solutions for every project size.</p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-5xl mx-auto">
-
-            {/* STARTER */}
-            <div className="p-1 w-full bg-gradient-to-b from-white/10 to-transparent rounded-[3rem]">
-              <div className="bg-[#050505] rounded-[2.9rem] p-12 h-full flex flex-col group hover:bg-zinc-900/50 transition-all">
-                <h3 className="text-xs font-black uppercase tracking-[0.3em] text-gray-500 mb-4">Community</h3>
-                <div className="text-6xl font-black mb-8 italic tracking-tighter">$150</div>
-                <ul className="space-y-6 mb-12 flex-1">
-                  <li className="flex items-center gap-4 text-gray-400 font-medium">
-                    <CheckCircle2 className="w-6 h-6 text-cyan-500" /> Custom Branding
-                  </li>
-                  <li className="flex items-center gap-4 text-gray-400 font-medium">
-                    <CheckCircle2 className="w-6 h-6 text-cyan-500" /> Standard Registry Help
-                  </li>
-                  <li className="flex items-center gap-4 text-gray-400 font-medium">
-                    <CheckCircle2 className="w-6 h-6 text-cyan-500" /> Hosted by MostLabz
-                  </li>
-                </ul>
-                <button className="w-full py-5 rounded-2xl border border-white/10 font-black uppercase italic tracking-tighter hover:bg-white hover:text-black transition-all">
-                  Launch Standard
-                </button>
-              </div>
-            </div>
-
-            {/* ENTERPRISE */}
-            <div className="p-1 w-full bg-gradient-to-b from-cyan-400 to-purple-600 rounded-[3rem] shadow-[0_0_60px_-15px_rgba(6,182,212,0.5)]">
-              <div className="bg-[#050505] rounded-[2.9rem] p-12 h-full flex flex-col relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-8">
-                  <Rocket className="w-10 h-10 text-cyan-400 animate-bounce" />
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5 }}
+              className="lg:col-span-4 pb-4"
+            >
+              <p className="text-gray-400 text-lg md:text-xl leading-tight mb-8">
+                converting twitter hype into instant on-chain liquidity. mostlabz injects institutional trading tools into every tweet.
+              </p>
+              <div className="flex gap-4">
+                <div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center group hover:bg-rose-500 transition-all cursor-pointer">
+                  <ArrowRight className="w-5 h-5 group-hover:-rotate-45 transition-transform" />
                 </div>
-                <h3 className="text-xs font-black uppercase tracking-[0.3em] text-cyan-400 mb-4">Elite Terminal</h3>
-                <div className="text-6xl font-black mb-8 italic tracking-tighter">$300</div>
-                <ul className="space-y-6 mb-12 flex-1">
-                  <li className="flex items-center gap-4 text-white font-bold">
-                    <CheckCircle2 className="w-6 h-6 text-cyan-400" /> Revenue-Share Setup
-                  </li>
-                  <li className="flex items-center gap-4 text-white font-bold">
-                    <CheckCircle2 className="w-6 h-6 text-cyan-400" /> Full Source Code Handover
-                  </li>
-                  <li className="flex items-center gap-4 text-white font-bold">
-                    <CheckCircle2 className="w-6 h-6 text-cyan-400" /> Priority Foundation Approval
-                  </li>
-                  <li className="flex items-center gap-4 text-white font-bold">
-                    <CheckCircle2 className="w-6 h-6 text-cyan-400" /> Custom Subdomain (buy.token.com)
-                  </li>
-                </ul>
-                <button className="w-full py-5 rounded-2xl bg-cyan-500 text-black font-black uppercase italic tracking-tighter hover:bg-white transition-all shadow-xl shadow-cyan-500/20">
-                  Secure Elite
-                </button>
+                <span className="text-sm font-black uppercase tracking-widest self-center">explore the ecosystem</span>
               </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* --- THE BENTO VIBE GRID --- */}
+      <section className="py-24 px-6 relative">
+        <motion.div
+          variants={container}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true }}
+          className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-6"
+        >
+          {/* CARD 1: UNIVERSAL BLINKS (Mesh Gradient + Scanning Effect) */}
+          <motion.div className="md:col-span-2 h-[420px] rounded-[3.5rem] bg-[#1a0510] border border-rose-500/20 p-12 flex flex-col justify-between relative overflow-hidden group">
+            {/* Background Decoration */}
+            <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-br from-rose-500/10 via-transparent to-transparent opacity-50" />
+            <div className="absolute -top-20 -right-20 w-80 h-80 bg-rose-600/20 blur-[100px] group-hover:bg-rose-600/30 transition-all duration-700" />
+
+            {/* Animated Scanning Line */}
+            <motion.div
+              animate={{ top: ["0%", "100%", "0%"] }}
+              transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+              className="absolute left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-rose-500/40 to-transparent z-10"
+            />
+
+            <div className="relative z-20">
+              <div className="w-16 h-16 rounded-2xl bg-rose-500/10 flex items-center justify-center border border-rose-500/20 mb-8">
+                <Sparkles className="w-8 h-8 text-rose-400" />
+              </div>
+              <h3 className="text-5xl font-black italic mb-4 tracking-tighter uppercase leading-[0.9]">universal <br /> engine</h3>
+              <p className="text-rose-200/60 text-lg max-w-sm font-medium leading-tight">one blink to rule them all. support any solana mint address instantly with zero configuration.</p>
             </div>
+
+            <div className="relative z-20 flex gap-2">
+              <span className="px-4 py-1.5 rounded-full bg-rose-500/10 border border-rose-500/20 text-[10px] font-black uppercase tracking-widest text-rose-400">jupiter v6</span>
+              <span className="px-4 py-1.5 rounded-full bg-rose-500/10 border border-rose-500/20 text-[10px] font-black uppercase tracking-widest text-rose-400">real-time</span>
+            </div>
+          </motion.div>
+
+          {/* CARD 2: REFERRAL (Glass stack + Floating Icon) */}
+          <motion.div className="h-[420px] rounded-[3.5rem] bg-gradient-to-b from-[#120b1e] to-[#0a0206] border border-fuchsia-500/20 p-10 flex flex-col justify-between relative overflow-hidden group">
+            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] brightness-200" />
+
+            {/* Floating Background Circles */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 bg-fuchsia-600/10 blur-[60px] rounded-full group-hover:scale-150 transition-transform duration-1000" />
+
+            <div className="relative z-10 w-14 h-14 rounded-xl bg-fuchsia-500/10 flex items-center justify-center border border-fuchsia-500/20">
+              <Coins className="w-7 h-7 text-fuchsia-400 group-hover:rotate-12 transition-transform" />
+            </div>
+
+            <div className="relative z-10">
+              <h3 className="text-3xl font-black tracking-tighter leading-none mb-4 uppercase italic text-fuchsia-100">0.5% trade <br /> royalty</h3>
+              <p className="text-fuchsia-300/40 text-sm font-bold uppercase tracking-widest">passive income on every click</p>
+            </div>
+          </motion.div>
+
+          {/* CARD 3: WHITELISTING (Network Grid + Glow) */}
+          <motion.div className="h-[420px] rounded-[3.5rem] bg-[#0a0206] border border-indigo-500/20 p-10 flex flex-col justify-between relative overflow-hidden group">
+            {/* Grid Pattern Background */}
+            <div className="absolute inset-0 opacity-[0.05]" style={{ backgroundImage: `radial-gradient(circle, #6366f1 1px, transparent 1px)`, backgroundSize: '24px 24px' }} />
+
+            <div className="relative z-10 w-14 h-14 rounded-xl bg-indigo-500/10 flex items-center justify-center border border-indigo-500/20">
+              <ShieldCheck className="w-7 h-7 text-indigo-400" />
+            </div>
+
+            <div className="relative z-10">
+              <div className="w-full h-[1px] bg-indigo-500/30 mb-6" />
+              <h3 className="text-3xl font-black tracking-tighter leading-none mb-2 uppercase italic text-indigo-100">dialect <br /> verified</h3>
+              <p className="text-indigo-300/40 text-sm font-bold uppercase tracking-widest text-wrap">Registry Approved Links</p>
+            </div>
+          </motion.div>
+
+          {/* CARD 4: THE BIG SHOWCASE (Glassmorphism Mockup Container) */}
+          {/* CARD 4: THE ULTIMATE SHOWCASE (3D Perspective + Floating HUD) */}
+          <motion.div className="md:col-span-4 min-h-[800px] rounded-[4rem] bg-[#0d0308] border border-white/5 relative overflow-hidden flex flex-col items-center justify-center p-4 md:p-20">
+
+            {/* Background "Aura" Lighting */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] bg-rose-600/10 blur-[120px] rounded-full animate-pulse" />
+            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay" />
+
+            {/* FLOATING HUD ELEMENTS (The "Luxe" touch) */}
+            <motion.div
+              animate={{ y: [0, -20, 0] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute top-20 left-10 md:left-24 z-30 p-4 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl hidden lg:block"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-2 h-2 rounded-full bg-green-500 animate-ping" />
+                <p className="text-[10px] font-black uppercase tracking-widest text-rose-200/50">live transactions</p>
+              </div>
+              <p className="mt-2 text-sm font-mono text-rose-400">+1.42 SOL <span className="text-gray-600">via Blink</span></p>
+            </motion.div>
+
+            <motion.div
+              animate={{ y: [0, 20, 0] }}
+              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+              className="absolute bottom-40 right-10 md:right-24 z-30 p-4 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl hidden lg:block"
+            >
+              <BarChart3 className="w-5 h-5 text-fuchsia-400 mb-2" />
+              <p className="text-[10px] font-black uppercase tracking-widest text-fuchsia-200/50">Volume Index</p>
+              <p className="text-sm font-mono text-fuchsia-400">98.4% <span className="text-gray-600">Efficiency</span></p>
+            </motion.div>
+
+            {/* THE MAIN 3D MOCKUP CONTAINER */}
+            <motion.div
+              whileHover={{ rotateY: -5, rotateX: 5, scale: 1.02 }}
+              className="relative z-20 w-full max-w-4xl transition-all duration-500 ease-out"
+              style={{ perspective: "1000px" }}
+            >
+              {/* Reflection/Glow behind image */}
+              <div className="absolute -inset-4 bg-gradient-to-tr from-rose-500/20 to-indigo-500/20 blur-2xl rounded-[3rem] -z-10" />
+
+              <div className="bg-[#121212]/90 backdrop-blur-3xl rounded-[3rem] border border-white/10 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] overflow-hidden">
+                {/* Browser-style Header */}
+                <div className="h-14 w-full bg-white/5 border-b border-white/5 flex items-center justify-between px-8">
+                  <div className="flex gap-2">
+                    <div className="w-3 h-3 rounded-full bg-rose-500/20" />
+                    <div className="w-3 h-3 rounded-full bg-fuchsia-500/20" />
+                    <div className="w-3 h-3 rounded-full bg-indigo-500/20" />
+                  </div>
+                  <div className="px-4 py-1 rounded-full bg-white/5 border border-white/5 text-[10px] font-mono text-gray-500">
+                    mostlabz.xyz/terminal/buy/pengu
+                  </div>
+                  <div className="w-3 h-3" /> {/* Spacer */}
+                </div>
+
+                {/* Image Container with inner shadow */}
+                <div className="p-8 md:p-12 flex justify-center bg-gradient-to-b from-transparent to-rose-950/10">
+                  <div className="relative group">
+                    <div className="absolute -inset-1 bg-gradient-to-r from-rose-500 to-fuchsia-600 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-1000"></div>
+                    <Image
+                      src="/blinks.png"
+                      alt="Blink Terminal"
+                      width={450}
+                      height={600}
+                      className="relative rounded-xl border border-white/10 shadow-2xl"
+                    />
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* REDESIGNED STATS: THE HUD BAR */}
+            <div className="mt-16 flex flex-wrap justify-center gap-8 md:gap-16 relative z-30">
+              {[
+                { val: "0.1s", label: "latency", color: "text-rose-500" },
+                { val: "100%", label: "uptime", color: "text-fuchsia-500" },
+                { val: "live", label: "status", color: "text-indigo-500" }
+              ].map((stat, i) => (
+                <div key={i} className="group cursor-pointer">
+                  <p className={`${stat.color} font-black text-3xl md:text-5xl tracking-tighter italic transition-transform group-hover:-translate-y-1`}>
+                    {stat.val}
+                  </p>
+                  <p className="text-gray-600 text-[10px] uppercase font-black tracking-[0.3em] mt-2">
+                    {stat.label}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+          </motion.div>
+        </motion.div>
+      </section>
+
+      {/* --- PRICING: THE RICH TIER --- */}
+      <section className="py-32 px-6">
+        <div className="max-w-5xl mx-auto">
+          <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
+            <h2 className="text-6xl md:text-8xl font-black tracking-tighter leading-none">choose <br /> your <span className="italic text-rose-500">power.</span></h2>
+            <p className="text-gray-500 max-w-xs text-right text-sm uppercase font-bold tracking-widest">investment in infrastructure is investment in growth.</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+            {/* STANDARD */}
+            <motion.div whileHover={{ y: -10 }} className="p-12 rounded-[4rem] bg-white/5 border border-white/10 hover:border-rose-500/50 transition-all group">
+              <h4 className="text-rose-500 font-black uppercase tracking-widest text-[10px] mb-4">standard build</h4>
+              <div className="text-7xl font-black tracking-tighter mb-8">$150</div>
+              <ul className="space-y-4 mb-12">
+                {['Custom UI Design', 'Registry Submission', '24h Deployment'].map((l, i) => (
+                  <li key={i} className="flex items-center gap-3 text-gray-400 text-sm">
+                    <CheckCircle2 className="w-4 h-4 text-rose-500" /> {l}
+                  </li>
+                ))}
+              </ul>
+              <button className="w-full py-6 rounded-3xl bg-white text-black font-black uppercase tracking-tighter italic text-xl hover:bg-rose-500 hover:text-white transition-all">start setup</button>
+            </motion.div>
+
+            {/* ELITE */}
+            <motion.div whileHover={{ y: -10 }} className="p-12 rounded-[4rem] bg-gradient-to-br from-rose-600 to-indigo-700 relative overflow-hidden shadow-[0_30px_100px_-20px_rgba(225,29,72,0.4)] group">
+              <div className="absolute top-0 right-0 p-8 opacity-20">
+                <Heart className="w-32 h-32 text-white fill-current" />
+              </div>
+              <h4 className="text-white font-black uppercase tracking-widest text-[10px] mb-4">elite terminal</h4>
+              <div className="text-7xl font-black tracking-tighter mb-8">$300</div>
+              <ul className="space-y-4 mb-12 relative z-10">
+                {['Revenue-Share Logic', 'Full Source Handover', 'Custom Subdomain', 'Priority Support'].map((l, i) => (
+                  <li key={i} className="flex items-center gap-3 text-white/90 text-sm font-bold">
+                    <CheckCircle2 className="w-4 h-4 text-white" /> {l}
+                  </li>
+                ))}
+              </ul>
+              <button className="w-full py-6 rounded-3xl bg-black text-white font-black uppercase tracking-tighter italic text-xl hover:scale-105 transition-all">get priority</button>
+            </motion.div>
 
           </div>
         </div>
       </section>
 
       {/* --- FOOTER --- */}
-      <footer className="py-20 border-t border-white/5 px-6">
+      {/* --- ELITE MINIMAL FOOTER --- */}
+      <footer className="py-32 px-6 border-t border-white/5 relative overflow-hidden">
+        {/* Subtle Background Glow */}
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-rose-600/5 blur-[120px] rounded-full -z-10" />
+
         <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-10 border-b border-white/5 pb-20 mb-10">
-            <div className="text-center md:text-left">
-              <h2 className="text-5xl font-black italic uppercase tracking-tighter mb-2">Build The Future.</h2>
-              <p className="text-gray-500">The 2026 Standard for Social Commerce on Solana.</p>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+
+            {/* BRAND SIDE */}
+            <div className="lg:col-span-5">
+              <div className="flex items-center gap-3 mb-8">
+                <div className="w-6 h-6 bg-rose-600 rounded-full animate-pulse shadow-[0_0_15px_rgba(225,29,72,0.4)]" />
+                <span className="text-3xl font-black tracking-tighter italic">mostlabz.</span>
+              </div>
+              <p className="text-gray-500 text-lg max-w-sm leading-tight mb-8">
+                building the high-speed social-commerce layer for the solana network.
+                the future of hype is here.
+              </p>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-rose-500/20 bg-rose-500/5">
+                <ShieldCheck className="w-3 h-3 text-rose-500" />
+                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-rose-500/80">3x superteam winner</span>
+              </div>
             </div>
-            <div className="flex gap-4">
-              <button className="w-14 h-14 rounded-full bg-white/5 flex items-center justify-center hover:bg-cyan-500 hover:text-black transition-all cursor-pointer">
-                <Twitter className="w-6 h-6" />
-              </button>
-              <button className="w-14 h-14 rounded-full bg-white/5 flex items-center justify-center hover:bg-cyan-500 hover:text-black transition-all cursor-pointer">
-                <ArrowUpRight className="w-6 h-6" />
-              </button>
+
+            {/* CONTACT & SOCIAL ZONE */}
+            <div className="lg:col-span-7 grid grid-cols-1 md:grid-cols-2 gap-12 lg:pl-20">
+
+              {/* CONNECT */}
+              <div className="flex flex-col gap-6">
+                <span className="text-rose-500 font-black text-xs uppercase tracking-[0.4em]">talk to us</span>
+                <a
+                  href="https://t.me/YOUR_TELEGRAM"
+                  target="_blank"
+                  className="group text-4xl font-black tracking-tighter flex items-center gap-3 hover:text-rose-400 transition-all"
+                >
+                  telegram <ArrowUpRight className="w-8 h-8 text-gray-700 group-hover:text-rose-400 group-hover:-translate-y-1 transition-all" />
+                </a>
+                <a
+                  href="mailto:hello@mostlabz.xyz"
+                  className="text-gray-500 hover:text-white transition-colors text-lg font-medium"
+                >
+                  hello@mostlabz.xyz
+                </a>
+              </div>
+
+              {/* SOCIALS */}
+              <div className="flex flex-col gap-6">
+                <span className="text-rose-500 font-black text-xs uppercase tracking-[0.4em]">follow vision</span>
+                <div className="flex flex-col gap-4">
+                  <a href="#" className="flex items-center gap-2 text-xl font-bold tracking-tighter hover:text-rose-500 transition-colors">
+                    <Twitter className="w-5 h-5 text-rose-500/50" /> twitter/x
+                  </a>
+                  <a href="#" className="flex items-center gap-2 text-xl font-bold tracking-tighter hover:text-rose-500 transition-colors">
+                    <BarChart3 className="w-5 h-5 text-rose-500/50" /> dexscanner
+                  </a>
+                  <a href="#" className="flex items-center gap-2 text-xl font-bold tracking-tighter hover:text-rose-500 transition-colors">
+                    <ExternalLink className="w-5 h-5 text-rose-500/50" /> github
+                  </a>
+                </div>
+              </div>
+
             </div>
           </div>
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-bold uppercase tracking-widest text-gray-600">
-            <p>&copy; 2026 MostLabz Infrastructure. All rights reserved.</p>
-            <p>Built by 3x Superteam Bounty Winner</p>
+
+          {/* BOTTOM BAR */}
+          <div className="mt-32 pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
+            <p className="text-gray-700 text-[10px] uppercase font-black tracking-[0.5em]">
+              &copy; 2026 mostlabz labs. all rights reserved.
+            </p>
+            <div className="flex gap-8 text-[10px] uppercase font-black tracking-[0.5em] text-gray-700">
+              <span className="hover:text-rose-500 cursor-pointer transition-colors">privacy</span>
+              <span className="hover:text-rose-500 cursor-pointer transition-colors">terms</span>
+            </div>
           </div>
         </div>
       </footer>
