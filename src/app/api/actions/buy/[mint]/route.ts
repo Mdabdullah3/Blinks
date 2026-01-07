@@ -12,18 +12,13 @@ export async function GET(req: Request, { params }: Context) {
   const baseHref = `${url.protocol}//${url.host}/api/actions/buy/${mint}`;
 
   try {
-    const res = await fetch(
-      `https://api.dexscreener.com/latest/dex/tokens/${mint}`
-    );
+    const res = await fetch(`https://api.dexscreener.com/latest/dex/tokens/${mint}`);
     const data = await res.json();
     const token = data.pairs?.[0];
 
-    const symbol =
-      token?.baseToken?.symbol || mint.substring(0, 4).toUpperCase();
+    const symbol = token?.baseToken?.symbol || mint.substring(0, 4).toUpperCase();
     const price = token?.priceUsd ? `$${token.priceUsd}` : "Live";
-    const icon =
-      token?.info?.imageUrl ||
-      "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/solana/info/logo.png";
+    const icon = token?.info?.imageUrl || "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/solana/info/logo.png";
 
     const payload: ActionGetResponse = {
       type: "action",
@@ -33,48 +28,23 @@ export async function GET(req: Request, { params }: Context) {
       label: "Buy",
       links: {
         actions: [
-          {
-            label: "0.1 SOL",
-            href: `${baseHref}?amount=0.1`,
-            type: "post",
-          },
-          {
-            label: "0.5 SOL",
-            href: `${baseHref}?amount=0.5`,
-            type: "post",
-          },
-          {
-            label: "1 SOL",
-            href: `${baseHref}?amount=1.0`,
-            type: "post",
-          },
+          { label: "0.1 SOL", href: `${baseHref}?amount=0.1`, type: "post" },
+          { label: "0.5 SOL", href: `${baseHref}?amount=0.5`, type: "post" },
+          { label: "1 SOL", href: `${baseHref}?amount=1.0`, type: "post" },
           {
             label: `Buy ${symbol}`,
             href: `${baseHref}?amount={amount}`,
-            parameters: [
-              { name: "amount", label: "Enter SOL amount", required: true },
-            ],
+            parameters: [{ name: "amount", label: "Enter SOL amount", required: true }],
             type: "post",
           },
         ],
       },
     };
 
-    // CRITICAL: We MUST pass the headers here
-    return new Response(JSON.stringify(payload), {
-      status: 200,
-      headers: {
-        ...ACTIONS_CORS_HEADERS,
-        "X-Action-Version": "2.1.3",
-        "X-Blockchain-Ids": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp", // Full Mainnet ID
-        "Content-Type": "application/json",
-      },
-    });
+    return Response.json(payload, { headers: ACTIONS_CORS_HEADERS });
   } catch (err) {
-    return Response.json(
-      { message: "Error" },
-      { headers: ACTIONS_CORS_HEADERS }
-    );
+    // FIXED: Catch block now returns the correct headers too!
+    return Response.json({ message: "Network Error" }, { status: 200, headers: ACTIONS_CORS_HEADERS });
   }
 }
 
@@ -83,10 +53,9 @@ export async function POST(req: Request, { params }: Context) {
   const url = new URL(req.url);
   const amount = url.searchParams.get("amount") || "0.1";
   const nextBaseHref = `${url.protocol}//${url.host}/api/actions/confirm/${mint}`;
+
   try {
-    const tokenRes = await fetch(
-      `https://api.dexscreener.com/latest/dex/tokens/${mint}`
-    );
+    const tokenRes = await fetch(`https://api.dexscreener.com/latest/dex/tokens/${mint}`);
     const tokenData = await tokenRes.json();
     const token = tokenData.pairs?.[0];
     const symbol = token?.baseToken?.symbol || "Token";
@@ -101,9 +70,8 @@ export async function POST(req: Request, { params }: Context) {
     const outAmount = Number(quote.outAmount) / Math.pow(10, 6);
     const totalUsdValue = (outAmount * usdPrice).toFixed(2);
 
-    // THIS IS THE PAYLOAD YOU BUILT
     const payload: ActionPostResponse = {
-      type: "post", // Tells the wallet this is a metadata update
+      type: "post",
       message:
         `----------------------------------------\n` +
         `📥 **SWAP SUMMARY**\n` +
@@ -120,31 +88,13 @@ export async function POST(req: Request, { params }: Context) {
       },
     };
 
-    // FIXED: Return the ACTUAL payload with headers
-    return new Response(JSON.stringify(payload), {
-      status: 200,
-      headers: {
-        ...ACTIONS_CORS_HEADERS,
-        "X-Action-Version": "2.1.3",
-        "X-Blockchain-Ids": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
-        "Content-Type": "application/json",
-      },
-    });
+    return Response.json(payload, { headers: ACTIONS_CORS_HEADERS });
   } catch (err) {
-    return Response.json(
-      { message: "Quote Error" },
-      { status: 500, headers: ACTIONS_CORS_HEADERS }
-    );
+    // FIXED: Catch block now returns the correct headers
+    return Response.json({ message: "Quote Error" }, { status: 200, headers: ACTIONS_CORS_HEADERS });
   }
 }
 
 export async function OPTIONS() {
-  return new Response(null, {
-    status: 204,
-    headers: {
-      ...ACTIONS_CORS_HEADERS,
-      "X-Action-Version": "2.1.3",
-      "X-Blockchain-Ids": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
-    },
-  });
+  return new Response(null, { status: 204, headers: ACTIONS_CORS_HEADERS });
 }
