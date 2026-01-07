@@ -49,14 +49,15 @@ export default function LandingPage() {
             <a href="#" className="hover:text-rose-400 transition-colors">engine</a>
             <a href="#" className="hover:text-rose-400 transition-colors">capital</a>
           </div>
-          <button className="bg-rose-600 hover:bg-rose-500 text-white px-5 py-2 rounded-full text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-rose-600/20">
-            launch
-          </button>
+          <a href="https://t.me/@abdullah_gram"><div className="bg-rose-600 hover:bg-rose-500 text-white px-5 py-2 rounded-full text-xs font-black uppercase tracking-widest transition-all shadow-lg shadow-rose-600/20">
+            Lunch
+          </div>
+          </a>
         </div>
       </nav>
 
       {/* --- HERO SECTION --- */}
-      <section className="relative pt-60 pb-32 px-6">
+      <section className="relative pt-40 md:pt-60 md:pb-32 pb-0 px-6">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
@@ -64,7 +65,7 @@ export default function LandingPage() {
             className="flex items-center gap-3 mb-6"
           >
             <div className="h-[1px] w-12 bg-rose-500" />
-            <span className="text-rose-500 text-xs font-black uppercase tracking-[0.4em]">vetted by superteam</span>
+            <span className="text-rose-500 text-xs font-black uppercase tracking-[0.4em]">vetted by superteam dev</span>
           </motion.div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-end">
@@ -103,7 +104,7 @@ export default function LandingPage() {
       </section>
 
       {/* --- THE BENTO VIBE GRID --- */}
-      <section className="py-24 px-6 relative">
+      <section className="py-20 px-6 relative">
         <motion.div
           variants={container}
           initial="hidden"
@@ -112,7 +113,7 @@ export default function LandingPage() {
           className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-6"
         >
           {/* CARD 1: UNIVERSAL BLINKS (Mesh Gradient + Scanning Effect) */}
-          <motion.div className="md:col-span-2 h-[420px] rounded-[3.5rem] bg-[#1a0510] border border-rose-500/20 p-12 flex flex-col justify-between relative overflow-hidden group">
+          <motion.div className="md:col-span-2 h-[400px] rounded-[3.5rem] bg-[#1a0510] border border-rose-500/20 p-12 flex flex-col justify-between relative overflow-hidden group">
             {/* Background Decoration */}
             <div className="absolute top-0 right-0 w-full h-full bg-gradient-to-br from-rose-500/10 via-transparent to-transparent opacity-50" />
             <div className="absolute -top-20 -right-20 w-80 h-80 bg-rose-600/20 blur-[100px] group-hover:bg-rose-600/30 transition-all duration-700" />
@@ -224,20 +225,75 @@ export default function LandingPage() {
                   </div>
                   <div className="w-3 h-3" /> {/* Spacer */}
                 </div>
+                {/* --- REAL CODED BLINK TERMINAL (NO IMAGE) --- */}
+                <div className="p-4 md:p-10 flex justify-center bg-gradient-to-b from-transparent to-rose-950/10">
+                  <div className="relative group w-full max-w-[420px]">
+                    {/* Outer Glow */}
+                    <div className="absolute -inset-1 bg-gradient-to-r from-rose-500 to-fuchsia-600 rounded-[2.5rem] blur opacity-10 group-hover:opacity-30 transition duration-1000"></div>
 
-                {/* Image Container with inner shadow */}
-                <div className="p-8 md:p-12 flex justify-center bg-gradient-to-b from-transparent to-rose-950/10">
-                  <div className="relative group">
-                    <div className="absolute -inset-1 bg-gradient-to-r from-rose-500 to-fuchsia-600 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-1000"></div>
-                    <Image
-                      src="/blinks.png"
-                      alt="Blink Terminal"
-                      width={450}
-                      height={600}
-                      className="relative rounded-xl border border-white/10 shadow-2xl"
-                    />
+                    {/* THE BLINK BOX CLONE */}
+                    <div className="relative bg-white rounded-[2rem] overflow-hidden flex flex-col shadow-2xl transition-transform duration-500 group-hover:scale-[1.01]">
+
+                      {/* 1. Banner Image Area */}
+                      <div className="h-44 w-full bg-[#121212] relative overflow-hidden">
+                        <div className="absolute inset-0 bg-gradient-to-br from-rose-600/40 to-indigo-900/40 animate-pulse" />
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <span className="text-white font-black text-4xl italic tracking-tighter opacity-40 uppercase">MostLabz</span>
+                        </div>
+                      </div>
+
+                      {/* 2. Content Area */}
+                      <div className="p-6 flex flex-col gap-4 text-left">
+                        {/* Domain & Verified Header */}
+                        <div className="flex items-center gap-1.5">
+                          <div className="w-4 h-4 rounded-full bg-rose-500 flex items-center justify-center">
+                            <Zap className="w-2 h-2 text-white fill-current" />
+                          </div>
+                          <span className="text-[11px] font-bold text-gray-500">mostlabz.xyz</span>
+                          <ShieldCheck className="w-3.5 h-3.5 text-rose-500" />
+                        </div>
+
+                        {/* Title & Description */}
+                        <div>
+                          <h4 className="text-black text-xl font-black tracking-tight leading-none mb-2 lowercase">Buy $BULL on X</h4>
+                          <p className="text-gray-500 text-xs leading-relaxed lowercase">
+                            buy $bull with sol. choose an amount or enter custom. fees distributed to community wallet.
+                          </p>
+                        </div>
+
+                        {/* 3. Action Buttons (Row 1) */}
+                        <div className="grid grid-cols-3 gap-2">
+                          {['0.1 sol', '0.5 sol', '1 sol'].map((amt) => (
+                            <button key={amt} className="py-2.5 bg-[#272727] text-white text-[11px] font-black rounded-xl hover:bg-rose-600 transition-colors uppercase italic tracking-tighter">
+                              {amt}
+                            </button>
+                          ))}
+                        </div>
+
+                        {/* 4. Custom Input (Row 2) */}
+                        <div className="flex items-center gap-2">
+                          <div className="flex-1 bg-gray-100 border border-gray-200 rounded-xl px-4 py-2.5">
+                            <span className="text-gray-400 text-[11px] font-bold lowercase">enter amount...</span>
+                          </div>
+                          <button className="bg-[#272727] text-white px-5 py-2.5 rounded-xl text-[11px] font-black uppercase italic tracking-tighter hover:bg-rose-600 transition-colors whitespace-nowrap">
+                            buy $bull
+                          </button>
+                        </div>
+
+                        {/* 5. Footer */}
+                        <div className="flex items-center justify-center gap-1 mt-2">
+                          <span className="text-[10px] text-gray-400 font-bold lowercase">powered by</span>
+                          <div className="flex items-center gap-1">
+                            <div className="w-2 h-2 rounded-full bg-indigo-500" />
+                            <span className="text-[10px] text-black font-black uppercase tracking-widest italic">dialect</span>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
                   </div>
                 </div>
+
               </div>
             </motion.div>
 
@@ -264,7 +320,7 @@ export default function LandingPage() {
       </section>
 
       {/* --- PRICING: THE RICH TIER --- */}
-      <section className="py-32 px-6">
+      <section className="md:py-20 py-12 px-6">
         <div className="max-w-5xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
             <h2 className="text-6xl md:text-8xl font-black tracking-tighter leading-none">choose <br /> your <span className="italic text-rose-500">power.</span></h2>
@@ -310,7 +366,7 @@ export default function LandingPage() {
 
       {/* --- FOOTER --- */}
       {/* --- ELITE MINIMAL FOOTER --- */}
-      <footer className="py-32 px-6 border-t border-white/5 relative overflow-hidden">
+      <footer className="py-20 px-6 border-t border-white/5 relative overflow-hidden">
         {/* Subtle Background Glow */}
         <div className="absolute bottom-0 right-0 w-96 h-96 bg-rose-600/5 blur-[120px] rounded-full -z-10" />
 
@@ -340,7 +396,7 @@ export default function LandingPage() {
               <div className="flex flex-col gap-6">
                 <span className="text-rose-500 font-black text-xs uppercase tracking-[0.4em]">talk to us</span>
                 <a
-                  href="https://t.me/YOUR_TELEGRAM"
+                  href="https://t.me/@abdullah_gram"
                   target="_blank"
                   className="group text-4xl font-black tracking-tighter flex items-center gap-3 hover:text-rose-400 transition-all"
                 >
@@ -358,13 +414,13 @@ export default function LandingPage() {
               <div className="flex flex-col gap-6">
                 <span className="text-rose-500 font-black text-xs uppercase tracking-[0.4em]">follow vision</span>
                 <div className="flex flex-col gap-4">
-                  <a href="#" className="flex items-center gap-2 text-xl font-bold tracking-tighter hover:text-rose-500 transition-colors">
+                  <a href="https://x.com/abdullahdevo" className="flex items-center gap-2 text-xl font-bold tracking-tighter hover:text-rose-500 transition-colors">
                     <Twitter className="w-5 h-5 text-rose-500/50" /> twitter/x
                   </a>
-                  <a href="#" className="flex items-center gap-2 text-xl font-bold tracking-tighter hover:text-rose-500 transition-colors">
+                  <a href="https://dexscreener.com/" className="flex items-center gap-2 text-xl font-bold tracking-tighter hover:text-rose-500 transition-colors">
                     <BarChart3 className="w-5 h-5 text-rose-500/50" /> dexscanner
                   </a>
-                  <a href="#" className="flex items-center gap-2 text-xl font-bold tracking-tighter hover:text-rose-500 transition-colors">
+                  <a href="https://github.com/Mdabdullah3" className="flex items-center gap-2 text-xl font-bold tracking-tighter hover:text-rose-500 transition-colors">
                     <ExternalLink className="w-5 h-5 text-rose-500/50" /> github
                   </a>
                 </div>
@@ -374,11 +430,11 @@ export default function LandingPage() {
           </div>
 
           {/* BOTTOM BAR */}
-          <div className="mt-32 pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
-            <p className="text-gray-700 text-[10px] uppercase font-black tracking-[0.5em]">
+          <div className="mt-20 pt-10 border-t  border-rose-400 flex flex-col md:flex-row justify-between items-center gap-6">
+            <p className="text-gray-100 text-[10px] uppercase font-black tracking-[0.5em]">
               &copy; 2026 mostlabz labs. all rights reserved.
             </p>
-            <div className="flex gap-8 text-[10px] uppercase font-black tracking-[0.5em] text-gray-700">
+            <div className="flex gap-8 text-[10px] uppercase font-black tracking-[0.5em] text-gray-100">
               <span className="hover:text-rose-500 cursor-pointer transition-colors">privacy</span>
               <span className="hover:text-rose-500 cursor-pointer transition-colors">terms</span>
             </div>
