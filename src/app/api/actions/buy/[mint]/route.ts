@@ -12,13 +12,17 @@ export async function GET(req: Request, { params }: Context) {
   const baseHref = `${url.protocol}//${url.host}/api/actions/buy/${mint}`;
 
   try {
-    const res = await fetch(`https://api.dexscreener.com/latest/dex/tokens/${mint}`);
+    const res = await fetch(
+      `https://api.dexscreener.com/latest/dex/tokens/${mint}`
+    );
     const data = await res.json();
     const token = data.pairs?.[0];
 
-    const symbol = token?.baseToken?.symbol || mint.substring(0, 4).toUpperCase();
+    const symbol =
+      token?.baseToken?.symbol || mint.substring(0, 4).toUpperCase();
     const price = token?.priceUsd ? `$${token.priceUsd}` : "Live";
-    const icon = token?.info?.imageUrl || "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/solana/info/logo.png";
+    const icon =
+      token?.info?.imageUrl || "https://i.ibb.co.com/392F91Jk/solana.png";
 
     const payload: ActionGetResponse = {
       type: "action",
@@ -34,7 +38,9 @@ export async function GET(req: Request, { params }: Context) {
           {
             label: `Buy ${symbol}`,
             href: `${baseHref}?amount={amount}`,
-            parameters: [{ name: "amount", label: "Enter SOL amount", required: true }],
+            parameters: [
+              { name: "amount", label: "Enter SOL amount", required: true },
+            ],
             type: "post",
           },
         ],
@@ -44,7 +50,10 @@ export async function GET(req: Request, { params }: Context) {
     return Response.json(payload, { headers: ACTIONS_CORS_HEADERS });
   } catch (err) {
     // FIXED: Catch block now returns the correct headers too!
-    return Response.json({ message: "Network Error" }, { status: 200, headers: ACTIONS_CORS_HEADERS });
+    return Response.json(
+      { message: "Network Error" },
+      { status: 200, headers: ACTIONS_CORS_HEADERS }
+    );
   }
 }
 
@@ -55,7 +64,9 @@ export async function POST(req: Request, { params }: Context) {
   const nextBaseHref = `${url.protocol}//${url.host}/api/actions/confirm/${mint}`;
 
   try {
-    const tokenRes = await fetch(`https://api.dexscreener.com/latest/dex/tokens/${mint}`);
+    const tokenRes = await fetch(
+      `https://api.dexscreener.com/latest/dex/tokens/${mint}`
+    );
     const tokenData = await tokenRes.json();
     const token = tokenData.pairs?.[0];
     const symbol = token?.baseToken?.symbol || "Token";
@@ -91,7 +102,10 @@ export async function POST(req: Request, { params }: Context) {
     return Response.json(payload, { headers: ACTIONS_CORS_HEADERS });
   } catch (err) {
     // FIXED: Catch block now returns the correct headers
-    return Response.json({ message: "Quote Error" }, { status: 200, headers: ACTIONS_CORS_HEADERS });
+    return Response.json(
+      { message: "Quote Error" },
+      { status: 200, headers: ACTIONS_CORS_HEADERS }
+    );
   }
 }
 
