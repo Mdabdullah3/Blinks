@@ -24,7 +24,7 @@ export async function GET(req: Request, { params }: Context) {
     
     const icon =
       token?.info?.imageUrl ||
-      "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/solana/info/logo.png";
+      "/public/solana.png";
 
     const payload: ActionGetResponse = {
       type: "action",
