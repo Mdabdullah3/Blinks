@@ -67,7 +67,7 @@ export default function LandingPage() {
             transition={{ delay: 0.2 }}
             className="text-gray-400 text-lg md:text-2xl max-w-3xl mx-auto mb-12 leading-relaxed"
           >
-            Don't let your community leave X to buy. MostLabz injects professional
+            Don&apos;t let your community leave X to buy. MostLabz injects professional
             trading terminals directly into your tweets.
           </motion.p>
 
