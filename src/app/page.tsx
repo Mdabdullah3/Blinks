@@ -78,7 +78,7 @@ export default function LandingPage() {
       </nav>
 
       {/* --- THE GALLERY BOUTIQUE HERO --- */}
-      <section className="relative min-h-screen pt-32 pb-20 flex flex-col items-center overflow-hidden bg-[#030104]">
+      <section className="relative min-h-screen pt-32 pb-10 flex flex-col items-center overflow-hidden bg-[#030104]">
 
         {/* --- LUXE MARQUEE BACKGROUND (KEEPING YOUR FAVORITE) --- */}
         <div className="absolute top-1/4 left-0 w-full -translate-y-1/2 overflow-hidden opacity-[0.08] pointer-events-none rotate-[-5deg] scale-110">
