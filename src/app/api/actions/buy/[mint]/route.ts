@@ -61,7 +61,15 @@ export async function GET(req: Request, { params }: Context) {
     };
 
     // CRITICAL: We MUST pass the headers here
-    return Response.json(payload, { headers: ACTIONS_CORS_HEADERS });
+    return new Response(JSON.stringify(payload), {
+      status: 200,
+      headers: {
+        ...ACTIONS_CORS_HEADERS,
+        "X-Action-Version": "2.1.3",
+        "X-Blockchain-Ids": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp", // Full Mainnet ID
+        "Content-Type": "application/json",
+      },
+    });
   } catch (err) {
     return Response.json(
       { message: "Error" },
@@ -75,7 +83,6 @@ export async function POST(req: Request, { params }: Context) {
   const url = new URL(req.url);
   const amount = url.searchParams.get("amount") || "0.1";
   const nextBaseHref = `${url.protocol}//${url.host}/api/actions/confirm/${mint}`;
-
   try {
     const tokenRes = await fetch(
       `https://api.dexscreener.com/latest/dex/tokens/${mint}`
@@ -91,12 +98,12 @@ export async function POST(req: Request, { params }: Context) {
     );
     const quote = await quoteRes.json();
 
-    // Jupiter returns outAmount in decimals. Most tokens are 6 decimals.
     const outAmount = Number(quote.outAmount) / Math.pow(10, 6);
     const totalUsdValue = (outAmount * usdPrice).toFixed(2);
 
+    // THIS IS THE PAYLOAD YOU BUILT
     const payload: ActionPostResponse = {
-      type: "post",
+      type: "post", // Tells the wallet this is a metadata update
       message:
         `----------------------------------------\n` +
         `📥 **SWAP SUMMARY**\n` +
@@ -113,10 +120,16 @@ export async function POST(req: Request, { params }: Context) {
       },
     };
 
-    return Response.json(
-      { transaction: "...", message: "..." },
-      { headers: ACTIONS_CORS_HEADERS }
-    );
+    // FIXED: Return the ACTUAL payload with headers
+    return new Response(JSON.stringify(payload), {
+      status: 200,
+      headers: {
+        ...ACTIONS_CORS_HEADERS,
+        "X-Action-Version": "2.1.3",
+        "X-Blockchain-Ids": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+        "Content-Type": "application/json",
+      },
+    });
   } catch (err) {
     return Response.json(
       { message: "Quote Error" },
@@ -124,6 +137,14 @@ export async function POST(req: Request, { params }: Context) {
     );
   }
 }
+
 export async function OPTIONS() {
-  return new Response(null, { headers: ACTIONS_CORS_HEADERS });
+  return new Response(null, {
+    status: 204,
+    headers: {
+      ...ACTIONS_CORS_HEADERS,
+      "X-Action-Version": "2.1.3",
+      "X-Blockchain-Ids": "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+    },
+  });
 }
