@@ -1,5 +1,6 @@
 import {
   ActionGetResponse,
+  ActionPostRequest,
   ActionPostResponse,
   ACTIONS_CORS_HEADERS,
 } from "@solana/actions";
@@ -28,20 +29,29 @@ export async function GET(req: Request, { params }: Context) {
       type: "action",
       icon: icon,
       title: `Buy ${symbol}`,
-      description: `Direct buy via Jupiter. Price: ${price}`,
+      description: `Direct buy via Jupiter V6. Current Price: ${price}`,
       label: "Buy",
       links: {
         actions: [
-          { label: "0.1 SOL", href: `${baseHref}?amount=0.1`, type: "post" },
-          { label: "0.5 SOL", href: `${baseHref}?amount=0.5`, type: "post" },
-          { label: "1 SOL", href: `${baseHref}?amount=1.0`, type: "post" },
+          {
+            label: "0.1 SOL", href: `${baseHref}?amount=0.1`,
+            type: "transaction"
+          },
+          {
+            label: "0.5 SOL", href: `${baseHref}?amount=0.5`,
+            type: "transaction"
+          },
+          {
+            label: "1.0 SOL", href: `${baseHref}?amount=1.0`,
+            type: "transaction"
+          },
           {
             label: `Buy ${symbol}`,
             href: `${baseHref}?amount={amount}`,
             parameters: [
               { name: "amount", label: "Enter SOL amount", required: true },
             ],
-            type: "post",
+            type: "transaction"
           },
         ],
       },
@@ -49,7 +59,6 @@ export async function GET(req: Request, { params }: Context) {
 
     return Response.json(payload, { headers: ACTIONS_CORS_HEADERS });
   } catch (err) {
-    // FIXED: Catch block now returns the correct headers too!
     return Response.json(
       { message: "Network Error" },
       { status: 200, headers: ACTIONS_CORS_HEADERS }
@@ -61,49 +70,65 @@ export async function POST(req: Request, { params }: Context) {
   const { mint } = await params;
   const url = new URL(req.url);
   const amount = url.searchParams.get("amount") || "0.1";
-  const nextBaseHref = `${url.protocol}//${url.host}/api/actions/confirm/${mint}`;
 
   try {
+    const body: ActionPostRequest = await req.json();
+    const userWallet = body.account;
+
+    // 1. Get Price Data for the Receipt
     const tokenRes = await fetch(
       `https://api.dexscreener.com/latest/dex/tokens/${mint}`
     );
     const tokenData = await tokenRes.json();
     const token = tokenData.pairs?.[0];
-    const symbol = token?.baseToken?.symbol || "Token";
+    const symbol = token?.baseToken?.symbol || "Tokens";
     const usdPrice = parseFloat(token?.priceUsd || "0");
 
+    // 2. Get Real Quote and Transaction from Jupiter
     const amountInLamports = Math.floor(Number(amount) * 1_000_000_000);
+
+    // FETCH QUOTE
     const quoteRes = await fetch(
       `https://quote-api.jup.ag/v6/quote?inputMint=So11111111111111111111111111111111111111112&outputMint=${mint}&amount=${amountInLamports}&slippageBps=100`
     );
     const quote = await quoteRes.json();
 
+    if (!quote.outAmount) throw new Error("No Liquidity");
+
+    // FETCH REAL TRANSACTION
+    const swapRes = await fetch("https://quote-api.jup.ag/v6/swap", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        quoteResponse: quote,
+        userPublicKey: userWallet,
+        wrapAndUnwrapSol: true,
+      }),
+    });
+    const { swapTransaction } = await swapRes.json();
+
+    // 3. Create the "Summary Receipt" for the wallet message
     const outAmount = Number(quote.outAmount) / Math.pow(10, 6);
     const totalUsdValue = (outAmount * usdPrice).toFixed(2);
 
+    const receiptMessage =
+      `----------------------------------------\n` +
+      `📥 SWAP SUMMARY\n` +
+      `----------------------------------------\n` +
+      `Pay: ${amount} SOL\n` +
+      `Receive: ${outAmount.toLocaleString()} ${symbol} (~$${totalUsdValue})\n` +
+      `----------------------------------------`;
+
     const payload: ActionPostResponse = {
-      type: "post",
-      message:
-        `----------------------------------------\n` +
-        `📥 **SWAP SUMMARY**\n` +
-        `----------------------------------------\n` +
-        `You pay: **${amount} SOL**\n` +
-        `You receive min: **${outAmount.toLocaleString()} ${symbol}** (~$${totalUsdValue})\n\n` +
-        `Platform Fee: 0.5%\n` +
-        `----------------------------------------`,
-      links: {
-        next: {
-          type: "post",
-          href: `${nextBaseHref}?amount=${amount}`,
-        },
-      },
+      type: "transaction",
+      transaction: swapTransaction, // THE REAL TRANSACTION DATA
+      message: receiptMessage, // THIS SHOWS UP IN PHANTOM/OKX
     };
 
     return Response.json(payload, { headers: ACTIONS_CORS_HEADERS });
   } catch (err) {
-    // FIXED: Catch block now returns the correct headers
     return Response.json(
-      { message: "Quote Error" },
+      { message: "Swap Failed: Insufficient Liquidity" },
       { status: 200, headers: ACTIONS_CORS_HEADERS }
     );
   }
