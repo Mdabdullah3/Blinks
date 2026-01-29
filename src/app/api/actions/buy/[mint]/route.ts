@@ -56,7 +56,6 @@ export async function GET(req: Request, { params }: Context) {
         ],
       },
     };
-
     return Response.json(payload, { headers: ACTIONS_CORS_HEADERS });
   } catch (err) {
     return Response.json(
